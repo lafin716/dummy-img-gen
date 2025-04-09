@@ -3,125 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dummy Image Generator</title>
+    <title>Image Generator API Guide</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
             color: #333;
-            background-color: #f0f2f5;
-            min-height: 100vh;
         }
-        .wrapper {
-            max-width: 800px;
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem;
-            position: relative;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        h1, h2 {
+        h1, h2, h3 {
             color: #2c3e50;
-            margin-bottom: 1rem;
+            margin-top: 1.5em;
         }
         h1 {
             text-align: center;
-            margin: 2rem 0;
-            font-size: 2rem;
+            color: #1a73e8;
+            margin-bottom: 1em;
         }
-        .container {
-            background-color: white;
-            border-radius: 8px;
-            padding: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-top: 4rem;
+        .language-selector {
+            text-align: center;
+            margin-bottom: 30px;
         }
-        .example {
-            background-color: #e9ecef;
-            padding: 1rem;
-            border-radius: 4px;
-            margin: 1rem 0;
-            font-family: monospace;
-            word-wrap: break-word;
-        }
-        .description {
-            margin-bottom: 1.5rem;
-        }
-        .parameter {
-            margin-bottom: 1.5rem;
-            padding-left: 1rem;
-            border-left: 3px solid #2c3e50;
-        }
-        .parameter h3 {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-        .note {
-            background-color: #fff3cd;
-            padding: 1rem;
-            border-radius: 4px;
-            margin: 1rem 0;
-            border-left: 4px solid #ffc107;
-        }
-        .lang-switcher {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 0.5rem;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .lang-select {
-            padding: 0.5rem 2.5rem 0.5rem 1rem;
-            font-size: 1rem;
-            border: 1px solid #2c3e50;
-            border-radius: 4px;
+        select {
+            padding: 8px 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             background-color: white;
             cursor: pointer;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 0.5rem center;
-            background-size: 1.5em;
         }
-        .lang-select:focus {
-            outline: none;
-            border-color: #2c3e50;
-            box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.2);
-        }
-        .lang-content {
+        .content {
             display: none;
         }
-        .lang-content.active {
+        .content.active {
             display: block;
         }
-        
-        @media (max-width: 768px) {
-            .lang-switcher {
-                position: static;
-                margin-bottom: 1rem;
-                text-align: center;
-            }
-            .container {
-                margin-top: 1rem;
-            }
-            .wrapper {
-                padding: 1rem;
-            }
-            .lang-select {
-                width: 100%;
-                max-width: 300px;
-            }
+        .endpoint {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #1a73e8;
+        }
+        .parameter {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .example {
+            background-color: #e8f0fe;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .example a {
+            color: #1a73e8;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .example a:hover {
+            text-decoration: underline;
+        }
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
         }
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="lang-switcher">
-            <select class="lang-select" id="languageSelect">
+    <div class="container">
+        <h1>Image Generator API Guide</h1>
+        
+        <div class="language-selector">
+            <select id="languageSelect" onchange="changeLanguage()">
                 <option value="en">🇺🇸 English</option>
                 <option value="ko">🇰🇷 한국어</option>
                 <option value="ja">🇯🇵 日本語</option>
@@ -130,220 +108,280 @@
             </select>
         </div>
 
-        <div class="container">
-            <!-- English -->
-            <div class="lang-content active" data-lang="en">
-                <h1>🎨 Dummy Image Generator</h1>
-                <div class="description">
-                    <p>Welcome to the Dummy Image Generator! This tool allows you to generate placeholder images with custom dimensions, text, and colors.</p>
-                </div>
-
-                <h2>Basic Usage</h2>
-                <p>Generate an image by specifying width and height:</p>
-                <div class="example">http://localhost:8000/300/200</div>
-
-                <h2>Optional Parameters</h2>
+        <!-- English Content -->
+        <div id="en" class="content active">
+            <h2>1. Single Image Generation</h2>
+            <div class="endpoint">
+                <h3>Endpoint: /{width}/{height}</h3>
+                <p>Generate a single image with specified dimensions.</p>
+                
+                <h4>Parameters:</h4>
                 <div class="parameter">
-                    <h3>Custom Text</h3>
-                    <p>Add custom text above the dimensions using the <code>text</code> parameter:</p>
-                    <div class="example">http://localhost:8000/300/200?text=Hello%20World</div>
+                    <p><code>width</code>: Image width (1-3000 pixels)</p>
+                    <p><code>height</code>: Image height (1-3000 pixels)</p>
+                    <p><code>text</code>: Optional text to display (supports Unicode)</p>
+                    <p><code>color</code>: Background color in hex format (e.g., FF0000 or #FF0000)</p>
                 </div>
 
-                <div class="parameter">
-                    <h3>Background Color</h3>
-                    <p>Set a specific background color using the <code>color</code> parameter with a hex color code:</p>
-                    <div class="example">http://localhost:8000/300/200?color=FF5733</div>
-                    <div class="note">Note: If the color parameter is invalid or not provided, a random color will be used.</div>
+                <h4>Examples:</h4>
+                <div class="example">
+                    <p>Basic image: <a href="/300/200" target="_blank">/300/200</a></p>
+                    <p>With text: <a href="/300/200?text=Hello" target="_blank">/300/200?text=Hello</a></p>
+                    <p>With color: <a href="/300/200?color=FF0000" target="_blank">/300/200?color=FF0000</a></p>
+                    <p>With text and color: <a href="/300/200?text=Hello&color=FF0000" target="_blank">/300/200?text=Hello&color=FF0000</a></p>
                 </div>
-
-                <h2>Combining Parameters</h2>
-                <p>You can combine multiple parameters:</p>
-                <div class="example">http://localhost:8000/300/200?text=Hello%20World&color=FF5733</div>
-
-                <h2>Features</h2>
-                <ul>
-                    <li>Custom dimensions (up to 3000x3000 pixels)</li>
-                    <li>Optional custom text display</li>
-                    <li>Hex color background support</li>
-                    <li>Random color generation</li>
-                    <li>Automatic text sizing and positioning</li>
-                    <li>High contrast text with outline for readability</li>
-                </ul>
             </div>
 
-            <!-- Korean -->
-            <div class="lang-content" data-lang="ko">
-                <h1>🎨 더미 이미지 생성기</h1>
-                <div class="description">
-                    <p>더미 이미지 생성기에 오신 것을 환영합니다! 이 도구를 사용하여 사용자 지정 크기, 텍스트 및 색상으로 이미지를 생성할 수 있습니다.</p>
-                </div>
+            <h2>2. Bulk Image Generation</h2>
+            <div class="endpoint">
+                <h3>Endpoint: /bulk/{count}/{width}/{height}</h3>
+                <p>Generate multiple images at once.</p>
 
-                <h2>기본 사용법</h2>
-                <p>너비와 높이를 지정하여 이미지 생성:</p>
-                <div class="example">http://localhost:8000/300/200</div>
-
-                <h2>선택적 매개변수</h2>
+                <h4>Parameters:</h4>
                 <div class="parameter">
-                    <h3>사용자 지정 텍스트</h3>
-                    <p><code>text</code> 매개변수를 사용하여 크기 위에 텍스트 추가:</p>
-                    <div class="example">http://localhost:8000/300/200?text=안녕하세요</div>
+                    <p><code>count</code>: Number of images to generate (1-50)</p>
+                    <p><code>width</code>: Image width (1-3000 pixels)</p>
+                    <p><code>height</code>: Image height (1-3000 pixels)</p>
+                    <p><code>text</code>: Optional text to display</p>
+                    <p><code>color</code>: Background color in hex format</p>
+                    <p><code>samebg</code>: Use same background color for all images (true/false)</p>
+                    <p><code>numbering</code>: Add numbers to text (true/false)</p>
+                    <p><code>download</code>: Download as ZIP file (true/false)</p>
                 </div>
 
+                <h4>Examples:</h4>
+                <div class="example">
+                    <p>Basic bulk: <a href="/bulk/5/300/200" target="_blank">/bulk/5/300/200</a></p>
+                    <p>With text: <a href="/bulk/5/300/200?text=Hello" target="_blank">/bulk/5/300/200?text=Hello</a></p>
+                    <p>With numbering: <a href="/bulk/5/300/200?text=Hello&numbering=true" target="_blank">/bulk/5/300/200?text=Hello&numbering=true</a></p>
+                    <p>Same background: <a href="/bulk/5/300/200?text=Hello&samebg=true" target="_blank">/bulk/5/300/200?text=Hello&samebg=true</a></p>
+                    <p>Download ZIP: <a href="/bulk/5/300/200?text=Hello&download=true" target="_blank">/bulk/5/300/200?text=Hello&download=true</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Korean Content -->
+        <div id="ko" class="content">
+            <h2>1. 단일 이미지 생성</h2>
+            <div class="endpoint">
+                <h3>엔드포인트: /{width}/{height}</h3>
+                <p>지정된 크기의 단일 이미지를 생성합니다.</p>
+                
+                <h4>파라미터:</h4>
                 <div class="parameter">
-                    <h3>배경색</h3>
-                    <p>hex 코드로 <code>color</code> 매개변수를 사용하여 특정 배경색 설정:</p>
-                    <div class="example">http://localhost:8000/300/200?color=FF5733</div>
-                    <div class="note">참고: color 매개변수가 유효하지 않거나 제공되지 않으면 임의의 색상이 사용됩니다.</div>
+                    <p><code>width</code>: 이미지 너비 (1-3000 픽셀)</p>
+                    <p><code>height</code>: 이미지 높이 (1-3000 픽셀)</p>
+                    <p><code>text</code>: 표시할 텍스트 (선택사항, 유니코드 지원)</p>
+                    <p><code>color</code>: 배경색 (16진수 형식, 예: FF0000 또는 #FF0000)</p>
                 </div>
 
-                <h2>매개변수 조합</h2>
-                <p>여러 매개변수를 함께 사용할 수 있습니다:</p>
-                <div class="example">http://localhost:8000/300/200?text=안녕하세요&color=FF5733</div>
-
-                <h2>기능</h2>
-                <ul>
-                    <li>사용자 지정 크기 (최대 3000x3000 픽셀)</li>
-                    <li>선택적 사용자 지정 텍스트 표시</li>
-                    <li>HEX 코드 배경색 지원</li>
-                    <li>랜덤 색상 생성</li>
-                    <li>자동 텍스트 크기 조정 및 위치 지정</li>
-                    <li>가독성을 위한 외곽선이 있는 고대비 텍스트</li>
-                </ul>
+                <h4>예시:</h4>
+                <div class="example">
+                    <p>기본 이미지: <a href="/300/200" target="_blank">/300/200</a></p>
+                    <p>텍스트 포함: <a href="/300/200?text=안녕하세요" target="_blank">/300/200?text=안녕하세요</a></p>
+                    <p>배경색 지정: <a href="/300/200?color=FF0000" target="_blank">/300/200?color=FF0000</a></p>
+                    <p>텍스트와 배경색: <a href="/300/200?text=안녕하세요&color=FF0000" target="_blank">/300/200?text=안녕하세요&color=FF0000</a></p>
+                </div>
             </div>
 
-            <!-- Japanese -->
-            <div class="lang-content" data-lang="ja">
-                <h1>🎨 ダミー画像ジェネレーター</h1>
-                <div class="description">
-                    <p>ダミー画像ジェネレーターへようこそ！このツールでカスタムサイズ、テキスト、色の画像を生成できます。</p>
-                </div>
+            <h2>2. 대량 이미지 생성</h2>
+            <div class="endpoint">
+                <h3>엔드포인트: /bulk/{count}/{width}/{height}</h3>
+                <p>여러 개의 이미지를 한 번에 생성합니다.</p>
 
-                <h2>基本的な使い方</h2>
-                <p>幅と高さを指定して画像を生成:</p>
-                <div class="example">http://localhost:8000/300/200</div>
-
-                <h2>オプションパラメータ</h2>
+                <h4>파라미터:</h4>
                 <div class="parameter">
-                    <h3>カスタムテキスト</h3>
-                    <p><code>text</code>パラメータを使用してサイズの上にテキストを追加:</p>
-                    <div class="example">http://localhost:8000/300/200?text=こんにちは</div>
+                    <p><code>count</code>: 생성할 이미지 수 (1-50)</p>
+                    <p><code>width</code>: 이미지 너비 (1-3000 픽셀)</p>
+                    <p><code>height</code>: 이미지 높이 (1-3000 픽셀)</p>
+                    <p><code>text</code>: 표시할 텍스트 (선택사항)</p>
+                    <p><code>color</code>: 배경색 (16진수 형식)</p>
+                    <p><code>samebg</code>: 모든 이미지에 동일한 배경색 사용 (true/false)</p>
+                    <p><code>numbering</code>: 텍스트에 번호 추가 (true/false)</p>
+                    <p><code>download</code>: ZIP 파일로 다운로드 (true/false)</p>
                 </div>
 
+                <h4>예시:</h4>
+                <div class="example">
+                    <p>기본 대량 생성: <a href="/bulk/5/300/200" target="_blank">/bulk/5/300/200</a></p>
+                    <p>텍스트 포함: <a href="/bulk/5/300/200?text=안녕하세요" target="_blank">/bulk/5/300/200?text=안녕하세요</a></p>
+                    <p>번호 추가: <a href="/bulk/5/300/200?text=안녕하세요&numbering=true" target="_blank">/bulk/5/300/200?text=안녕하세요&numbering=true</a></p>
+                    <p>동일 배경색: <a href="/bulk/5/300/200?text=안녕하세요&samebg=true" target="_blank">/bulk/5/300/200?text=안녕하세요&samebg=true</a></p>
+                    <p>ZIP 다운로드: <a href="/bulk/5/300/200?text=안녕하세요&download=true" target="_blank">/bulk/5/300/200?text=안녕하세요&download=true</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Japanese Content -->
+        <div id="ja" class="content">
+            <h2>1. 単一画像生成</h2>
+            <div class="endpoint">
+                <h3>エンドポイント: /{width}/{height}</h3>
+                <p>指定されたサイズの単一画像を生成します。</p>
+                
+                <h4>パラメータ:</h4>
                 <div class="parameter">
-                    <h3>背景色</h3>
-                    <p>hexコードで<code>color</code>パラメータを使用して特定の背景色を設定:</p>
-                    <div class="example">http://localhost:8000/300/200?color=FF5733</div>
-                    <div class="note">注: colorパラメータが無効または指定されていない場合、ランダムな色が使用されます。</div>
+                    <p><code>width</code>: 画像の幅 (1-3000 ピクセル)</p>
+                    <p><code>height</code>: 画像の高さ (1-3000 ピクセル)</p>
+                    <p><code>text</code>: 表示するテキスト (オプション、Unicode対応)</p>
+                    <p><code>color</code>: 背景色 (16進数形式、例: FF0000 または #FF0000)</p>
                 </div>
 
-                <h2>パラメータの組み合わせ</h2>
-                <p>複数のパラメータを組み合わせることができます:</p>
-                <div class="example">http://localhost:8000/300/200?text=こんにちは&color=FF5733</div>
-
-                <h2>機能</h2>
-                <ul>
-                    <li>カスタムサイズ（最大3000x3000ピクセル）</li>
-                    <li>オプションのカスタムテキスト表示</li>
-                    <li>HEXカラーコードによる背景色設定</li>
-                    <li>ランダムカラー生成</li>
-                    <li>自動テキストサイズ調整と配置</li>
-                    <li>読みやすさを考慮した輪郭付きの高コントラストテキスト</li>
-                </ul>
+                <h4>例:</h4>
+                <div class="example">
+                    <p>基本画像: <a href="/300/200" target="_blank">/300/200</a></p>
+                    <p>テキスト付き: <a href="/300/200?text=こんにちは" target="_blank">/300/200?text=こんにちは</a></p>
+                    <p>背景色指定: <a href="/300/200?color=FF0000" target="_blank">/300/200?color=FF0000</a></p>
+                    <p>テキストと背景色: <a href="/300/200?text=こんにちは&color=FF0000" target="_blank">/300/200?text=こんにちは&color=FF0000</a></p>
+                </div>
             </div>
 
-            <!-- Chinese -->
-            <div class="lang-content" data-lang="zh">
-                <h1>🎨 示例图片生成器</h1>
-                <div class="description">
-                    <p>欢迎使用示例图片生成器！此工具可以生成自定义尺寸、文本和颜色的图片。</p>
-                </div>
+            <h2>2. 一括画像生成</h2>
+            <div class="endpoint">
+                <h3>エンドポイント: /bulk/{count}/{width}/{height}</h3>
+                <p>複数の画像を一度に生成します。</p>
 
-                <h2>基本用法</h2>
-                <p>通过指定宽度和高度生成图片：</p>
-                <div class="example">http://localhost:8000/300/200</div>
-
-                <h2>可选参数</h2>
+                <h4>パラメータ:</h4>
                 <div class="parameter">
-                    <h3>自定义文本</h3>
-                    <p>使用<code>text</code>参数在尺寸上方添加文本：</p>
-                    <div class="example">http://localhost:8000/300/200?text=你好</div>
+                    <p><code>count</code>: 生成する画像数 (1-50)</p>
+                    <p><code>width</code>: 画像の幅 (1-3000 ピクセル)</p>
+                    <p><code>height</code>: 画像の高さ (1-3000 ピクセル)</p>
+                    <p><code>text</code>: 表示するテキスト (オプション)</p>
+                    <p><code>color</code>: 背景色 (16進数形式)</p>
+                    <p><code>samebg</code>: すべての画像に同じ背景色を使用 (true/false)</p>
+                    <p><code>numbering</code>: テキストに番号を追加 (true/false)</p>
+                    <p><code>download</code>: ZIPファイルとしてダウンロード (true/false)</p>
                 </div>
 
+                <h4>例:</h4>
+                <div class="example">
+                    <p>基本一括生成: <a href="/bulk/5/300/200" target="_blank">/bulk/5/300/200</a></p>
+                    <p>テキスト付き: <a href="/bulk/5/300/200?text=こんにちは" target="_blank">/bulk/5/300/200?text=こんにちは</a></p>
+                    <p>番号付き: <a href="/bulk/5/300/200?text=こんにちは&numbering=true" target="_blank">/bulk/5/300/200?text=こんにちは&numbering=true</a></p>
+                    <p>同一背景色: <a href="/bulk/5/300/200?text=こんにちは&samebg=true" target="_blank">/bulk/5/300/200?text=こんにちは&samebg=true</a></p>
+                    <p>ZIPダウンロード: <a href="/bulk/5/300/200?text=こんにちは&download=true" target="_blank">/bulk/5/300/200?text=こんにちは&download=true</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chinese Content -->
+        <div id="zh" class="content">
+            <h2>1. 单个图像生成</h2>
+            <div class="endpoint">
+                <h3>端点: /{width}/{height}</h3>
+                <p>生成指定尺寸的单个图像。</p>
+                
+                <h4>参数:</h4>
                 <div class="parameter">
-                    <h3>背景颜色</h3>
-                    <p>使用<code>color</code>参数设置特定的背景颜色（十六进制代码）：</p>
-                    <div class="example">http://localhost:8000/300/200?color=FF5733</div>
-                    <div class="note">注意：如果颜色参数无效或未提供，将使用随机颜色。</div>
+                    <p><code>width</code>: 图像宽度 (1-3000 像素)</p>
+                    <p><code>height</code>: 图像高度 (1-3000 像素)</p>
+                    <p><code>text</code>: 显示文本 (可选，支持Unicode)</p>
+                    <p><code>color</code>: 背景颜色 (十六进制格式，例如: FF0000 或 #FF0000)</p>
                 </div>
 
-                <h2>组合参数</h2>
-                <p>您可以组合多个参数：</p>
-                <div class="example">http://localhost:8000/300/200?text=你好&color=FF5733</div>
-
-                <h2>功能特点</h2>
-                <ul>
-                    <li>自定义尺寸（最大3000x3000像素）</li>
-                    <li>可选的自定义文本显示</li>
-                    <li>支持十六进制颜色代码</li>
-                    <li>随机颜色生成</li>
-                    <li>自动文本大小调整和定位</li>
-                    <li>高对比度文本，带有轮廓以提高可读性</li>
-                </ul>
+                <h4>示例:</h4>
+                <div class="example">
+                    <p>基本图像: <a href="/300/200" target="_blank">/300/200</a></p>
+                    <p>带文本: <a href="/300/200?text=你好" target="_blank">/300/200?text=你好</a></p>
+                    <p>指定背景色: <a href="/300/200?color=FF0000" target="_blank">/300/200?color=FF0000</a></p>
+                    <p>文本和背景色: <a href="/300/200?text=你好&color=FF0000" target="_blank">/300/200?text=你好&color=FF0000</a></p>
+                </div>
             </div>
 
-            <!-- Vietnamese -->
-            <div class="lang-content" data-lang="vi">
-                <h1>🎨 Trình Tạo Ảnh Mẫu</h1>
-                <div class="description">
-                    <p>Chào mừng đến với Trình Tạo Ảnh Mẫu! Công cụ này cho phép bạn tạo ảnh với kích thước, văn bản và màu sắc tùy chỉnh.</p>
-                </div>
+            <h2>2. 批量图像生成</h2>
+            <div class="endpoint">
+                <h3>端点: /bulk/{count}/{width}/{height}</h3>
+                <p>一次生成多个图像。</p>
 
-                <h2>Cách Sử Dụng Cơ Bản</h2>
-                <p>Tạo ảnh bằng cách chỉ định chiều rộng và chiều cao:</p>
-                <div class="example">http://localhost:8000/300/200</div>
-
-                <h2>Tham Số Tùy Chọn</h2>
+                <h4>参数:</h4>
                 <div class="parameter">
-                    <h3>Văn Bản Tùy Chỉnh</h3>
-                    <p>Thêm văn bản phía trên kích thước bằng tham số <code>text</code>:</p>
-                    <div class="example">http://localhost:8000/300/200?text=Xin%20chào</div>
+                    <p><code>count</code>: 生成图像数量 (1-50)</p>
+                    <p><code>width</code>: 图像宽度 (1-3000 像素)</p>
+                    <p><code>height</code>: 图像高度 (1-3000 像素)</p>
+                    <p><code>text</code>: 显示文本 (可选)</p>
+                    <p><code>color</code>: 背景颜色 (十六进制格式)</p>
+                    <p><code>samebg</code>: 所有图像使用相同背景色 (true/false)</p>
+                    <p><code>numbering</code>: 文本添加编号 (true/false)</p>
+                    <p><code>download</code>: 下载为ZIP文件 (true/false)</p>
                 </div>
 
+                <h4>示例:</h4>
+                <div class="example">
+                    <p>基本批量: <a href="/bulk/5/300/200" target="_blank">/bulk/5/300/200</a></p>
+                    <p>带文本: <a href="/bulk/5/300/200?text=你好" target="_blank">/bulk/5/300/200?text=你好</a></p>
+                    <p>带编号: <a href="/bulk/5/300/200?text=你好&numbering=true" target="_blank">/bulk/5/300/200?text=你好&numbering=true</a></p>
+                    <p>相同背景: <a href="/bulk/5/300/200?text=你好&samebg=true" target="_blank">/bulk/5/300/200?text=你好&samebg=true</a></p>
+                    <p>ZIP下载: <a href="/bulk/5/300/200?text=你好&download=true" target="_blank">/bulk/5/300/200?text=你好&download=true</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vietnamese Content -->
+        <div id="vi" class="content">
+            <h2>1. Tạo Ảnh Đơn Lẻ</h2>
+            <div class="endpoint">
+                <h3>Endpoint: /{width}/{height}</h3>
+                <p>Tạo một ảnh với kích thước được chỉ định.</p>
+                
+                <h4>Tham số:</h4>
                 <div class="parameter">
-                    <h3>Màu Nền</h3>
-                    <p>Đặt màu nền cụ thể bằng tham số <code>color</code> với mã màu hex:</p>
-                    <div class="example">http://localhost:8000/300/200?color=FF5733</div>
-                    <div class="note">Lưu ý: Nếu tham số màu không hợp lệ hoặc không được cung cấp, một màu ngẫu nhiên sẽ được sử dụng.</div>
+                    <p><code>width</code>: Chiều rộng ảnh (1-3000 pixel)</p>
+                    <p><code>height</code>: Chiều cao ảnh (1-3000 pixel)</p>
+                    <p><code>text</code>: Văn bản hiển thị (tùy chọn, hỗ trợ Unicode)</p>
+                    <p><code>color</code>: Màu nền (định dạng hex, ví dụ: FF0000 hoặc #FF0000)</p>
                 </div>
 
-                <h2>Kết Hợp Tham Số</h2>
-                <p>Bạn có thể kết hợp nhiều tham số:</p>
-                <div class="example">http://localhost:8000/300/200?text=Xin%20chào&color=FF5733</div>
+                <h4>Ví dụ:</h4>
+                <div class="example">
+                    <p>Ảnh cơ bản: <a href="/300/200" target="_blank">/300/200</a></p>
+                    <p>Với văn bản: <a href="/300/200?text=Xin chào" target="_blank">/300/200?text=Xin chào</a></p>
+                    <p>Với màu nền: <a href="/300/200?color=FF0000" target="_blank">/300/200?color=FF0000</a></p>
+                    <p>Văn bản và màu: <a href="/300/200?text=Xin chào&color=FF0000" target="_blank">/300/200?text=Xin chào&color=FF0000</a></p>
+                </div>
+            </div>
 
-                <h2>Tính Năng</h2>
-                <ul>
-                    <li>Kích thước tùy chỉnh (tối đa 3000x3000 pixel)</li>
-                    <li>Hiển thị văn bản tùy chỉnh tùy chọn</li>
-                    <li>Hỗ trợ mã màu hex cho nền</li>
-                    <li>Tạo màu ngẫu nhiên</li>
-                    <li>Tự động điều chỉnh kích thước và vị trí văn bản</li>
-                    <li>Văn bản tương phản cao với viền để dễ đọc</li>
-                </ul>
+            <h2>2. Tạo Nhiều Ảnh</h2>
+            <div class="endpoint">
+                <h3>Endpoint: /bulk/{count}/{width}/{height}</h3>
+                <p>Tạo nhiều ảnh cùng một lúc.</p>
+
+                <h4>Tham số:</h4>
+                <div class="parameter">
+                    <p><code>count</code>: Số lượng ảnh cần tạo (1-50)</p>
+                    <p><code>width</code>: Chiều rộng ảnh (1-3000 pixel)</p>
+                    <p><code>height</code>: Chiều cao ảnh (1-3000 pixel)</p>
+                    <p><code>text</code>: Văn bản hiển thị (tùy chọn)</p>
+                    <p><code>color</code>: Màu nền (định dạng hex)</p>
+                    <p><code>samebg</code>: Sử dụng cùng màu nền cho tất cả ảnh (true/false)</p>
+                    <p><code>numbering</code>: Thêm số thứ tự vào văn bản (true/false)</p>
+                    <p><code>download</code>: Tải xuống dưới dạng file ZIP (true/false)</p>
+                </div>
+
+                <h4>Ví dụ:</h4>
+                <div class="example">
+                    <p>Cơ bản: <a href="/bulk/5/300/200" target="_blank">/bulk/5/300/200</a></p>
+                    <p>Với văn bản: <a href="/bulk/5/300/200?text=Xin chào" target="_blank">/bulk/5/300/200?text=Xin chào</a></p>
+                    <p>Với số thứ tự: <a href="/bulk/5/300/200?text=Xin chào&numbering=true" target="_blank">/bulk/5/300/200?text=Xin chào&numbering=true</a></p>
+                    <p>Cùng màu nền: <a href="/bulk/5/300/200?text=Xin chào&samebg=true" target="_blank">/bulk/5/300/200?text=Xin chào&samebg=true</a></p>
+                    <p>Tải ZIP: <a href="/bulk/5/300/200?text=Xin chào&download=true" target="_blank">/bulk/5/300/200?text=Xin chào&download=true</a></p>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('languageSelect').addEventListener('change', function() {
-            // Remove active class from all content
-            document.querySelectorAll('.lang-content').forEach(content => {
-                content.classList.remove('active');
-            });
+        function changeLanguage() {
+            const select = document.getElementById('languageSelect');
+            const contents = document.getElementsByClassName('content');
             
-            // Add active class to selected content
-            const selectedLang = this.value;
-            document.querySelector(`.lang-content[data-lang="${selectedLang}"]`).classList.add('active');
-        });
+            // Hide all content
+            for (let content of contents) {
+                content.classList.remove('active');
+            }
+            
+            // Show selected language content
+            document.getElementById(select.value).classList.add('active');
+        }
     </script>
 </body>
 </html> 
